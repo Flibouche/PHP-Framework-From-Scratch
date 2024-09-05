@@ -9,7 +9,7 @@
  */
 
 /**
- * Main Model trait
+ * Model trait
  */
 trait Model
 {
@@ -19,6 +19,7 @@ trait Model
     protected $offset = 0;
     protected $order_column = "id";
     protected $order_type = "DESC";
+    public $errors = [];
 
     public function findAll()
     {
@@ -49,7 +50,7 @@ trait Model
         return $this->query($query, $data);
     }
 
-    public function first($data, $data_not)
+    public function first($data, $data_not = [])
     {
         $keys = array_keys($data);
         $keys_not = array_keys($data_not);

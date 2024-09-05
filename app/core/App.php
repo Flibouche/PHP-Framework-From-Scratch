@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * App class
+ */
 class App
 {
     // Je déclare les variables par défaut pour le contrôleur et la méthode.

@@ -5,6 +5,9 @@
  * Le trait Database est utilisé dans le fichier Model.php, donc le trait ne peut pas être utilisé directement sans être inclus dans une classe 
  */
 
+/**
+ * Database trait
+ */
 trait Database
 {
     private function connect()

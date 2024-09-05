@@ -1,9 +1,16 @@
 <?php
 
-Trait Controller
+/**
+ * Controller trait
+ */
+trait Controller
 {
-    public function view(string $name) : void
+    public function view(string $name, $data = []): void
     {
+        if (!empty($data)) {
+            extract($data);
+        }
+
         $filename = "../app/views/" . $name . ".view.php";
         if (file_exists($filename)) {
             require $filename;
