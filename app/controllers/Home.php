@@ -5,9 +5,10 @@ class Home extends Controller
     public function index($a = '', $b = '', $c = '')
     {
         $model = new Model;
-        $arr['name'] = "Bob";
+        $arr['name'] = 'Mary';
+        $arr['age'] = 50;
 
-        $result = $model->where($arr);
+        $result = $model->update(2, $arr);
 
         show($result);
 
