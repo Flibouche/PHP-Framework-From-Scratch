@@ -4,7 +4,12 @@ class Home extends Controller
 {
     public function index($a = '', $b = '', $c = '')
     {
-        echo "This is the home controller";
+        $model = new Model;
+        $arr['name'] = "Bob";
+
+        $result = $model->where($arr);
+
+        show($result);
 
         $this->view('home');
     }

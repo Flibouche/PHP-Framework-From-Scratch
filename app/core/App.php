@@ -2,6 +2,7 @@
 
 class App
 {
+    // Je déclare les variables par défaut pour le contrôleur et la méthode.
     private $controller = 'Home';
     private $method = 'index';
 
@@ -29,7 +30,7 @@ class App
             $this->controller = "_404";
         }
 
-        // Je crée
+        // Je crée une instance du contrôleur et je charge la méthode appropriée, par défaut ça sera le contrôleur 'Home' et la méthode 'index'.
         $controller = new $this->controller;
         call_user_func_array([$controller, $this->method], []);
     }
