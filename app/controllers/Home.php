@@ -1,17 +1,11 @@
 <?php
 
-class Home extends Controller
+class Home
 {
-    public function index($a = '', $b = '', $c = '')
+    use Controller;
+    
+    public function index()
     {
-        $model = new Model;
-        $arr['name'] = 'Mary';
-        $arr['age'] = 50;
-
-        $result = $model->update(2, $arr);
-
-        show($result);
-
         $this->view('home');
     }
 }

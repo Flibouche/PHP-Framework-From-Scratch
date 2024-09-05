@@ -21,3 +21,9 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 
     define('ROOT', 'https://www.mywebsite.com');
 }
+
+define('APP_NAME', "My Website");
+define('APP_DESC', "Best website on the planet");
+
+// True = afficher les erreurs, False = les cacher
+define('DEBUG', true);

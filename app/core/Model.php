@@ -8,13 +8,24 @@
  * - Réduit la duplication de code en centralisant les méthodes communes
  */
 
-class Model
+/**
+ * Main Model trait
+ */
+trait Model
 {
     use Database;
 
-    protected $table = 'user';
     protected $limit = 10;
     protected $offset = 0;
+    protected $order_column = "id";
+    protected $order_type = "DESC";
+
+    public function findAll()
+    {
+        $query = "select * from $this->table order by $this->order_column $this->order_type limit $this->limit offset $this->offset";
+
+        return $this->query($query);
+    }
 
     public function where(array $data, array $data_not = [])
     {
@@ -32,7 +43,7 @@ class Model
 
         $query = trim($query, " && ");
 
-        $query .= " limit $this->limit offset $this->offset";
+        $query .= " order by $this->order_column $this->order_type limit $this->limit offset $this->offset";
         $data = array_merge($data, $data_not);
 
         return $this->query($query, $data);
@@ -67,6 +78,15 @@ class Model
 
     public function insert($data)
     {
+        // Permet d'enlever les colonnes non autorisées
+        if (!empty($this->allowedColumns)) {
+            foreach ($data as $key => $value) {
+                if (!in_array($key, $this->allowedColumns)) {
+                    unset($data[$key]);
+                }
+            }
+        }
+
         $keys = array_keys($data);
 
         $query = "insert into $this->table (" . implode(",", $keys) . ") values (:" . implode(",:", $keys) . ")";
@@ -78,6 +98,15 @@ class Model
 
     public function update($id, $data, $id_column = 'id')
     {
+        // Permet d'enlever les colonnes non autorisées
+        if (!empty($this->allowedColumns)) {
+            foreach ($data as $key => $value) {
+                if (!in_array($key, $this->allowedColumns)) {
+                    unset($data[$key]);
+                }
+            }
+        }
+
         $keys = array_keys($data);
         $query = "update $this->table set ";
 
