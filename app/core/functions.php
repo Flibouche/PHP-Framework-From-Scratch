@@ -181,3 +181,155 @@ function get_date($date): string
 {
     return date('jS M, Y', strtotime($date));
 }
+
+// Fonction qui convertit les chemins des images de relatifs à absolus en ajoutant le chemin racine
+function add_root_to_images($contents)
+{
+    // Récupère toutes les balises <img> dans le contenu
+    preg_match_all('/<img[^>]+>/', $contents, $matches);
+
+    // Vérifie si des balises <img> ont été trouvées
+    if (is_array($matches) && count($matches) > 0) {
+
+        foreach ($matches[0] as $match) {
+
+            // Récupère l'attribut src de chaque balise <img>
+            preg_match('/src="[^"]+/', $match, $matches2);
+
+            // Vérifie si le chemin n'est pas déjà absolu (ne contient pas 'http')
+            if (!strstr($matches2[0], 'http')) {
+
+                // Remplace le chemin relatif par un chemin absolu en ajoutant la constante ROOT
+                $contents = str_replace($matches2[0], 'src="' . ROOT . '/' . str_replace('src="', "", $matches2[0]), $contents);
+            }
+        }
+    }
+
+    // Retourne le contenu modifié
+    return $contents;
+}
+
+// Fonction qui convertit les images du contenu de l'éditeur de texte en fichiers réels
+function remove_images_from_content($content, $folder = "uploads/")
+{
+    if (!file_exists($folder)) {
+        mkdir($folder, 0777, true);
+        file_put_contents($folder . "index.php", "Access Denied!");
+    }
+
+    // Enlève les images du contenu
+    preg_match_all('/<img[^>]+>/', $content, $matches);
+    $new_content = $content;
+
+    if (is_array($matches) && count($matches) > 0) {
+
+        $image_class = new \Core\Image();
+        foreach ($matches[0] as $match) {
+
+            if (strstr($match, "http")) {
+                // Ignore les images qui ont déjà des liens
+                continue;
+            }
+
+            // On récupère la source
+            preg_match('/src="[^"]+/', $match, $matches2);
+
+            // On récupère le nom du fichier
+            preg_match('/data-filename="[^\"]+/', $match, $matches3);
+
+            if (strstr($matches2[0], 'data:')) {
+
+                $parts = explode(",", $matches2[0]);
+                $basename = $matches3[0] ?? 'basename.jpg';
+                $basename = str_replace('data-filename="', "", $basename);
+
+                $filename = $folder . "img_" . sha1(rand(0, 9999999999)) . $basename;
+
+                $new_content = str_replace($parts[0] . "," . $parts[1], 'src="' . $filename, $new_content);
+                file_put_contents($filename, base64_decode($parts[1]));
+
+                // On redimensionne l'image
+                $image_class->resize($filename, 1000);
+            }
+        }
+    }
+
+    return $new_content;
+}
+
+// Fonction qui supprime les images du contenu de l'éditeur de texte
+function delete_images_from_content(string $content, string $content_new = ''): void
+{
+    // Supprime les images du contenu si aucun contenu nouveau n'est fourni
+    if (empty($content_new)) {
+
+        // Récupère toutes les balises <img> dans le contenu
+        preg_match_all('/<img[^>]+>/', $content, $matches);
+
+        if (is_array($matches) && count($matches) > 0) {
+            foreach ($matches[0] as $match) {
+
+                // Récupère l'attribut src de chaque image
+                preg_match('/src="[^"]+/', $match, $matches2);
+                $matches2[0] = str_replace('src="', "", $matches2[0]);
+
+                // Supprime le fichier image s'il existe
+                if (file_exists($matches2[0])) {
+                    unlink($matches2[0]);
+                }
+            }
+        }
+    } else {
+        // Compare l'ancien contenu au nouveau et supprime du contenu ancien ce qui n'est pas présent dans le nouveau
+
+        // Récupère toutes les balises <img> dans l'ancien contenu
+        preg_match_all('/<img[^>]+>/', $content, $matches);
+        // Récupère toutes les balises <img> dans le nouveau contenu
+        preg_match_all('/<img[^>]+>/', $content_new, $matches_new);
+
+        $old_images = [];
+        $new_images = [];
+
+        /** Collecte des anciennes images **/
+        if (is_array($matches) && count($matches) > 0) {
+            foreach ($matches[0] as $match) {
+
+                // Récupère l'attribut src de chaque image ancienne
+                preg_match('/src="[^"]+/', $match, $matches2);
+                $matches2[0] = str_replace('src="', "", $matches2[0]);
+
+                // Ajoute le chemin de l'image à l'array des anciennes images si elle existe
+                if (file_exists($matches2[0])) {
+                    $old_images[] = $matches2[0];
+                }
+            }
+        }
+
+        /** Collecte des nouvelles images **/
+        if (is_array($matches_new) && count($matches_new) > 0) {
+            foreach ($matches_new[0] as $match) {
+
+                // Récupère l'attribut src de chaque image nouvelle
+                preg_match('/src="[^"]+/', $match, $matches2);
+                $matches2[0] = str_replace('src="', "", $matches2[0]);
+
+                // Ajoute le chemin de l'image à l'array des nouvelles images si elle existe
+                if (file_exists($matches2[0])) {
+                    $new_images[] = $matches2[0];
+                }
+            }
+        }
+
+        /** Compare et supprime toutes les images qui n'apparaissent pas dans le tableau des nouvelles images **/
+        foreach ($old_images as $img) {
+
+            // Supprime l'image si elle n'est pas présente dans le nouveau contenu
+            if (!in_array($img, $new_images)) {
+
+                if (file_exists($img)) {
+                    unlink($img);
+                }
+            }
+        }
+    }
+}
