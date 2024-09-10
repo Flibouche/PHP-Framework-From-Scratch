@@ -2,6 +2,7 @@
 
 defined('ROOTPATH') or exit('Access Denied');
 
+// Fonction qui permet de vérifier les différentes extensions PHP requises
 check_extensions();
 function check_extensions()
 {
@@ -95,6 +96,36 @@ function message(string $msg = null, bool $clear = false): mixed
         return $msg;
     }
     return false;
+}
+
+// Fonction qui retourne les variables URL
+function URL($key): mixed
+{
+    $URL = $_GET['url'] ?? 'home';
+    $URL = explode("/", trim($URL, "/"));
+
+    switch ($key) {
+        case 'page':
+        case 0:
+            return $URL[0] ?? null;
+            break;
+        case 'section':
+        case 'slug':
+        case 1:
+            return $URL[1] ?? null;
+            break;
+        case 'action':
+        case 2:
+            return $URL[2] ?? null;
+            break;
+        case 'id':
+        case 3:
+            return $URL[3] ?? null;
+            break;
+        default:
+            return null;
+            break;
+    }
 }
 
 /** 
