@@ -78,3 +78,21 @@ function get_pagination_vars(): array
 
     return $vars;
 }
+
+// Fonction qui sauvegarde ou affiche un message
+function message(string $msg = null, bool $clear = false): mixed
+{
+    $session = new Core\Session();
+
+    if (!empty($msg)) {
+        $session->set('message', $msg);
+    } else if (!empty($session->get('message'))) {
+        $msg = $session->get('message');
+
+        if ($clear) {
+            $session->pop('message');
+        }
+        return $msg;
+    }
+    return false;
+}
