@@ -39,11 +39,13 @@ function show($stuff)
     echo "</pre>";
 }
 
+// Fonction qui escape les caractères spéciaux
 function esc($str)
 {
     return htmlspecialchars($str);
 }
 
+// Fonction qui redirige vers une page
 function redirect($path)
 {
     header("Location: " . ROOT . "/" . $path);
@@ -63,4 +65,16 @@ function get_image(mixed $file = '', string $type = 'post'): string
     } else {
         return ROOT . "/assets/images/no_image.png";
     }
+}
+
+// Fonction qui retourne les variables de pagination
+function get_pagination_vars(): array
+{
+    $vars = [];
+    $vars['page'] = $_GET['page'] ?? 1;
+    $vars['page'] = (int)$vars['page'];
+    $vars['prev_page'] = $vars['page'] <= 1 ? 1 : $vars['page'] - 1;
+    $vars['next_page'] = $vars['page'] + 1;
+
+    return $vars;
 }
