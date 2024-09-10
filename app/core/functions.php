@@ -175,3 +175,9 @@ function old_select(string $key, mixed $value, mixed $default = "", string $mode
     // Retourne une chaîne vide si aucune condition n'est remplie
     return '';
 }
+
+// Fonction qui retourne la date formatée
+function get_date($date): string
+{
+    return date('jS M, Y', strtotime($date));
+}
