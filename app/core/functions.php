@@ -49,3 +49,18 @@ function redirect($path)
     header("Location: " . ROOT . "/" . $path);
     die;
 }
+
+// Fonction qui check si l'image existe, autrement retourne un placeholder
+function get_image(mixed $file = '', string $type = 'post'): string
+{
+    $file = $file ?? '';
+    if (file_exists($file)) {
+        return ROOT . "/" . $file;
+    }
+
+    if ($type == 'user') {
+        return ROOT . "/assets/images/user.png";
+    } else {
+        return ROOT . "/assets/images/no_image.png";
+    }
+}
