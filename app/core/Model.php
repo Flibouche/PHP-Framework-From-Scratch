@@ -1,5 +1,7 @@
 <?php
 
+namespace Model;
+
 defined('ROOTPATH') OR exit('Access Denied');
 
 /**
@@ -15,7 +17,7 @@ defined('ROOTPATH') OR exit('Access Denied');
  */
 trait Model
 {
-    use Database;
+    use \Model\Database;
 
     protected $limit = 10;
     protected $offset = 0;

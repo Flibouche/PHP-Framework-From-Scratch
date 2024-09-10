@@ -1,5 +1,7 @@
 <?php
 
+namespace Controller;
+
 defined('ROOTPATH') OR exit('Access Denied');
 
 /**
@@ -7,7 +9,7 @@ defined('ROOTPATH') OR exit('Access Denied');
  */
 class _404
 {
-    use Controller;
+    use MainController;
     
     public function index()
     {

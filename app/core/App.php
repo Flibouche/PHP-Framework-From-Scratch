@@ -1,6 +1,6 @@
 <?php
 
-defined('ROOTPATH') OR exit('Access Denied');
+defined('ROOTPATH') or exit('Access Denied');
 
 /**
  * App class
@@ -38,7 +38,7 @@ class App
         }
 
         // Je crée une instance du contrôleur et je charge la méthode appropriée, par défaut ça sera le contrôleur 'Home' et la méthode 'index'.
-        $controller = new $this->controller;
+        $controller = new ('\Controller\\' . $this->controller);
 
         // Je sélectionne la méthode à appeler si elle est spécifiée dans l'URL.
         if (!empty($URL[1])) {

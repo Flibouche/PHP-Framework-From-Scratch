@@ -1,5 +1,7 @@
 <?php
 
+namespace Model;
+
 defined('ROOTPATH') OR exit('Access Denied');
 
 /**
@@ -12,7 +14,7 @@ defined('ROOTPATH') OR exit('Access Denied');
  */
 trait Database
 {
-    private function connect()
+    private function connect(): PDO
     {
         $string = "mysql:hostname=" . DBHOST . ";dbname=" . DBNAME;
         $con = new PDO($string, DBUSER, DBPASS);

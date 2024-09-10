@@ -2,14 +2,14 @@
 
 namespace Controller;
 
-defined('ROOTPATH') OR exit('Access Denied');
+defined('ROOTPATH') or exit('Access Denied');
 
 /**
  * Home class
  */
 class Home
 {
-    use Controller;
+    use MainController;
 
     public function index()
     {

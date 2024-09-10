@@ -1,11 +1,13 @@
 <?php
 
+namespace Controller;
+
 defined('ROOTPATH') OR exit('Access Denied');
 
 /**
  * Controller trait
  */
-trait Controller
+trait MainController
 {
     public function view(string $name, $data = []): void
     {
