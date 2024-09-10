@@ -1,5 +1,7 @@
 <?php
 
+defined('ROOTPATH') OR exit('Access Denied');
+
 /**
  * Utilisation du trait Database au lieu de l'héritage dans la classe Model
  * Avantages :

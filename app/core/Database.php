@@ -1,5 +1,7 @@
 <?php
 
+defined('ROOTPATH') OR exit('Access Denied');
+
 /**
  * Utilisation d'un "trait" au lieu d'une "class" pour permettre la réutilisation du code dans plusieurs classes si besoin
  * Le trait Database est utilisé dans le fichier Model.php, donc le trait ne peut pas être utilisé directement sans être inclus dans une classe 

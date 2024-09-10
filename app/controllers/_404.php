@@ -1,5 +1,7 @@
 <?php
 
+defined('ROOTPATH') OR exit('Access Denied');
+
 /**
  * _404 class
  */
