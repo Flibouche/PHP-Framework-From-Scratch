@@ -5,14 +5,16 @@ namespace Controller;
 defined('ROOTPATH') or exit('Access Denied');
 
 /**
- * Home class
+ * Logout class
  */
-class Home
+class Logout
 {
     use MainController;
 
     public function index()
     {
-        $this->view('home');
+        $session = new \Core\Session();
+        $session->logout();
+        redirect('login');
     }
 }

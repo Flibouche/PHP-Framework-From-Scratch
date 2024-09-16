@@ -159,6 +159,11 @@ trait Model
 
         if (!empty($this->validationRules)) {
             foreach ($this->validationRules as $column => $rules) {
+
+                if (!isset($data[$column])) {
+                    continue;
+                }
+
                 foreach ($rules as $rule) {
                     switch ($rule) {
                         case 'required':
@@ -168,7 +173,7 @@ trait Model
                             break;
 
                         case 'email':
-                            if (!filter_var($data[$column], FILTER_VALIDATE_EMAIL)) {
+                            if (!filter_var(trim($data[$column]), FILTER_VALIDATE_EMAIL)) {
                                 $this->errors[$column] = "Invalid email address !";
                             }
                             break;
