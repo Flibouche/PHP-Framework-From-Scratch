@@ -139,6 +139,14 @@ trait Model
         return false;
     }
 
+    public function getError($key)
+    {
+        if (!empty($this->errors[$key])) {
+            return $this->errors[$key];
+        }
+        return "";
+    }
+
     protected function getPrimaryKey()
     {
         return $this->primaryKey ?? 'id';
