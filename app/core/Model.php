@@ -139,6 +139,7 @@ trait Model
         return false;
     }
 
+    // Fonction qui permet de récupérer les erreurs de validation
     public function getError($key)
     {
         if (!empty($this->errors[$key])) {
@@ -162,7 +163,7 @@ trait Model
                     switch ($rule) {
                         case 'required':
                             if (empty($data[$column])) {
-                                $this->errors[$column] = "The column " . $column . " is required !";
+                                $this->errors[$column] = ucfirst($column) . " is required !";
                             }
                             break;
 
@@ -174,7 +175,7 @@ trait Model
 
                         case 'alpha':
                             if (!preg_match("/^[a-zA-Z]+$/", trim($data[$column]))) {
-                                $this->errors[$column] = ucfirst($column) . " should only have alphabetical letters !";
+                                $this->errors[$column] = ucfirst($column) . " should only have alphabetical letters without spaces !";
                             }
                             break;
 

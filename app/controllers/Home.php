@@ -19,7 +19,7 @@ class Home
             redirect('login');
         }
 
-        $user->signup($_POST);
+        // $user->signup($_POST);
 
         $data['user'] = $user;
         $this->view('home', $data);

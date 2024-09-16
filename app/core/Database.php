@@ -14,10 +14,10 @@ defined('ROOTPATH') OR exit('Access Denied');
  */
 trait Database
 {
-    private function connect(): PDO
+    private function connect(): \PDO
     {
         $string = "mysql:hostname=" . DBHOST . ";dbname=" . DBNAME;
-        $con = new PDO($string, DBUSER, DBPASS);
+        $con = new \PDO($string, DBUSER, DBPASS);
         return $con;
     }
 
@@ -28,7 +28,7 @@ trait Database
 
         $check = $stmt->execute($data);
         if ($check) {
-            $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+            $result = $stmt->fetchAll(\PDO::FETCH_OBJ);
 
             if (is_array($result) && count($result)) {
                 return $result;
@@ -45,7 +45,7 @@ trait Database
 
         $check = $stmt->execute($data);
         if ($check) {
-            $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+            $result = $stmt->fetchAll(\PDO::FETCH_OBJ);
 
             if (is_array($result) && count($result)) {
                 return $result[0];

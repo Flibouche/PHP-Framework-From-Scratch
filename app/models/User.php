@@ -35,17 +35,17 @@ class User
      *****************************/
     protected $validationRules = [
         'email' => [
-            'required',
             'email',
             'unique',
+            'required', // Required à la fin puisque l'ordre des règles est important
         ],
         'username' => [
-            'required',
             'alpha_space',
+            'required',
         ],
         'password' => [
-            'required',
             'not_less_than_8_chars',
+            'required',
         ],
     ];
 }
