@@ -13,6 +13,15 @@ class Home
 
     public function index()
     {
-        $this->view('home');
+        $user = new \Model\User();
+        if ($user->validate($_POST)) {
+            $user->insert($_POST);
+            redirect('login');
+        }
+
+        $user->signup($_POST);
+
+        $data['user'] = $user;
+        $this->view('home', $data);
     }
 }

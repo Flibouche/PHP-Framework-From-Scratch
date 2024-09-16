@@ -2,7 +2,7 @@
 
 namespace Model;
 
-defined('ROOTPATH') OR exit('Access Denied');
+defined('ROOTPATH') or exit('Access Denied');
 
 /**
  * Utilisation du trait Database au lieu de l'héritage dans la classe Model
@@ -135,6 +135,97 @@ trait Model
         $query = "delete from $this->table where $id_column = :$id_column";
 
         $this->query($query, $data);
+
+        return false;
+    }
+
+    protected function getPrimaryKey()
+    {
+        return $this->primaryKey ?? 'id';
+    }
+
+    public function validate($data)
+    {
+        $this->errors = [];
+
+        if (!empty($this->validationRules)) {
+            foreach ($this->validationRules as $column => $rules) {
+                foreach ($rules as $rule) {
+                    switch ($rule) {
+                        case 'required':
+                            if (empty($data[$column])) {
+                                $this->errors[$column] = "The column " . $column . " is required !";
+                            }
+                            break;
+
+                        case 'email':
+                            if (!filter_var($data[$column], FILTER_VALIDATE_EMAIL)) {
+                                $this->errors[$column] = "Invalid email address !";
+                            }
+                            break;
+
+                        case 'alpha':
+                            if (!preg_match("/^[a-zA-Z]+$/", trim($data[$column]))) {
+                                $this->errors[$column] = ucfirst($column) . " should only have alphabetical letters !";
+                            }
+                            break;
+
+                        case 'alpha_space':
+                            if (!preg_match("/^[a-zA-Z ]+$/", trim($data[$column]))) {
+                                $this->errors[$column] = ucfirst($column) . " should only have alphabetical letters & spaces !";
+                            }
+                            break;
+
+                        case 'alpha_numeric':
+                            if (!preg_match("/^[a-zA-Z0-9]+$/", trim($data[$column]))) {
+                                $this->errors[$column] = ucfirst($column) . " should only have alphabetical letters & numbers !";
+                            }
+                            break;
+
+                        case 'alpha_numeric_symbol':
+                            if (!preg_match("/^[a-zA-Z0-9\-\_\$\%\*\[\]\(\)\& ]+$/", trim($data[$column]))) {
+                                $this->errors[$column] = ucfirst($column) . " should only have alphabetical letters, numbers, symbols & spaces !";
+                            }
+                            break;
+
+                        case 'alpha_symbol':
+                            if (!preg_match("/^[a-zA-Z\-\_\$\%\*\[\]\(\)\& ]+$/", trim($data[$column]))) {
+                                $this->errors[$column] = ucfirst($column) . " should only have alphabetical letters, symbols & spaces !";
+                            }
+                            break;
+
+                        case 'not_less_than_8_chars':
+                            if (strlen(trim($data[$column])) < 8) {
+                                $this->errors[$column] = ucfirst($column) . " should not be less than 8 characters !";
+                            }
+                            break;
+
+                        case 'unique':
+                            $key = $this->getPrimaryKey();
+                            if (!empty($data[$key])) {
+                                // Edit mode
+                                if ($this->first([$column => $data[$column]], [$key => $data[$key]])) {
+                                    $this->errors[$column] = ucfirst($column) . " should be unique !";
+                                }
+                            } else {
+                                // Insert mode
+                                if ($this->first([$column => $data[$column]])) {
+                                    $this->errors[$column] = ucfirst($column) . " should be unique !";
+                                }
+                            }
+                            break;
+
+                        default:
+                            $this->errors['rules'] = "The rule " . $rule . " was not found !";
+                            break;
+                    }
+                }
+            }
+        }
+
+        if (empty($this->errors)) {
+            return true;
+        }
 
         return false;
     }

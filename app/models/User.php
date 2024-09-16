@@ -2,7 +2,7 @@
 
 namespace Model;
 
-defined('ROOTPATH') OR exit('Access Denied');
+defined('ROOTPATH') or exit('Access Denied');
 
 /**
  * User class
@@ -12,36 +12,40 @@ class User
     use Model;
 
     protected $table = 'user';
+    protected $primaryKey = 'id';
 
     protected $allowedColumns = [
         'email',
         'password',
     ];
 
-    public function validate($data)
-    {
-        $this->errors = [];
-
-        if (empty($data['email'])) {
-            $this->errors['email'] = "Email is required";
-        } else {
-            if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-                $this->errors['email'] = "Email is not valid";
-            }
-        }
-
-        if (empty($data['password'])) {
-            $this->errors['password'] = "Password is required";
-        }
-
-        if (empty($data['terms'])) {
-            $this->errors['terms'] = "Please accept the terms and conditions";
-        }
-
-        if (empty($this->errors)) {
-            return true;
-        }
-
-        return false;
-    }
+    /*****************************
+     *  rules include : 
+        'required',
+        'alpha',
+        'email',
+        'numeric',
+        'unique',
+        'symbol',
+        'longer_than_8_chars',
+        'alpha_numeric',
+        'alpha_numeric_symbol',
+        'alpha_symbol',
+     *
+     *****************************/
+    protected $validationRules = [
+        'email' => [
+            'required',
+            'email',
+            'unique',
+        ],
+        'username' => [
+            'required',
+            'alpha_space',
+        ],
+        'password' => [
+            'required',
+            'not_less_than_8_chars',
+        ],
+    ];
 }
