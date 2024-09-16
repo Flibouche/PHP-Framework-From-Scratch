@@ -17,9 +17,13 @@ class Pager
     public $end = 1;
     public $limit = 10;
     public $nav_class = "";
+    public $nav_styles = "";
     public $ul_class = "pagination justify-content-center";
+    public $ul_styles = "";
     public $li_class = "page-item";
+    public $li_styles = "";
     public $a_class = "page-link";
+    public $a_styles = "";
 
     public function __construct($limit = 10, $extras = 1)
     {
@@ -55,16 +59,32 @@ class Pager
 
     public function display($record_count = null)
     {
-        if ($record_count == null) {
+        if ($record_count == null)
             $record_count = $this->limit;
-        }
 
-        $template_file = ROOTPATH . "/app/views/templates/pager_template.php";
+        if ($record_count == $this->limit || $this->page_number > 1) {
+?>
+            <br class="clearfix">
+            <div>
+                <nav class="<?= $this->nav_class ?>" style="<?= $this->nav_styles ?>">
+                    <ul class="<?= $this->ul_class ?>" style="<?= $this->ul_styles ?>">
+                        <li class="<?= $this->li_class ?>" style="<?= $this->li_styles ?>">
+                            <a class="<?= $this->a_class ?>" style="<?= $this->a_styles ?>" href="<?= $this->links['first'] ?>">First</a>
+                        </li>
 
-        if (file_exists($template_file)) {
-            include $template_file;
-        } else {
-            echo "Template not found.";
+                        <?php for ($x = $this->start; $x <= $this->end; $x++): ?>
+                            <li class="<?= $this->li_class ?> <?= ($x == $this->page_number) ? ' active ' : ''; ?>" style="<?= $this->li_styles ?>">
+                                <a class="<?= $this->a_class ?>" style="<?= $this->a_styles ?>" href="<?= preg_replace('/page=[0-9]+/', "page=" . $x, $this->links['current']) ?>"><?= $x ?></a>
+                            </li>
+                        <?php endfor; ?>
+
+                        <li class="<?= $this->li_class ?>" style="<?= $this->li_styles ?>">
+                            <a class="<?= $this->a_class ?>" style="<?= $this->a_styles ?>" href="<?= $this->links['next'] ?>">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+<?php
         }
     }
 }
