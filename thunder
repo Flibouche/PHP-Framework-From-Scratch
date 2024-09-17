@@ -1,0 +1,23 @@
+<?php
+
+if (php_sapi_name() != 'cli') {
+    die("This tool is only for use in the command line.");
+};
+
+// Permet de définir le chemin du fichier courant
+define('DS', DIRECTORY_SEPARATOR); // Permet de définir le séparateur de répertoire en fonction du système d'exploitation
+define('CPATH', __DIR__ . DS);
+chdir(CPATH);
+
+// ARGV permet de récupérer les arguments passés en ligne de commande
+$action = $argv[1] ?? 'help';
+
+require 'app' . DS . 'thunder' . DS . 'init.php';
+
+$thunder = new \Thunder\Thunder;
+
+if (empty($action)) {
+    call_user_func_array([$thunder, 'help'], []);
+} else {
+    call_user_func_array([$thunder, $action], []);
+}
