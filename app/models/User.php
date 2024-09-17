@@ -35,7 +35,23 @@ class User
         'alpha_symbol',
      *
      *****************************/
-    protected $validationRules = [
+    protected $onInsertValidationRules = [
+        'username' => [
+            'alpha_space',
+            'required', // Required à la fin puisque l'ordre des règles est important
+        ],
+        'email' => [
+            'email',
+            'unique',
+            'required',
+        ],
+        'password' => [
+            'not_less_than_8_chars',
+            'required',
+        ],
+    ];
+
+    protected $onUpdateValidationRules = [
         'username' => [
             'alpha_space',
             'required', // Required à la fin puisque l'ordre des règles est important

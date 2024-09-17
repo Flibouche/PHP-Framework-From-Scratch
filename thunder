@@ -4,11 +4,10 @@ if (php_sapi_name() != 'cli') {
     die("This tool is only for use in the command line.");
 };
 
-// Permet de définir le chemin du fichier courant
 define('DS', DIRECTORY_SEPARATOR); // Permet de définir le séparateur de répertoire en fonction du système d'exploitation
-define('CPATH', __DIR__ . DS);
-define('ROOTPATH', __DIR__ . DS);
-chdir(CPATH);
+define('CPATH', __DIR__ . DS); // Permet de définir le chemin du répertoire courant
+define('ROOTPATH', __DIR__ . DS); // Permet de définir le chemin du répertoire racine
+chdir(CPATH); // Par défaut, on se place dans le répertoire courant
 
 // ARGV permet de récupérer les arguments passés en ligne de commande
 $action = $argv[1] ?? 'help';
