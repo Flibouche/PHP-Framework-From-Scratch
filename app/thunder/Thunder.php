@@ -11,9 +11,70 @@ class Thunder
 {
     private $version = '1.0.0';
 
-    public function db()
+    public function db($argv)
     {
-        echo "\n\rThis is the db function\n\r";
+        $mode = $argv[1] ?? null;
+        $param1 = $argv[2] ?? null;
+        // Création du fichier en fonction de la commande
+        switch ($mode) {
+                // Create
+            case 'db:create':
+                // Check si param1 est vide
+                if (empty($param1)) {
+                    die("\n\rPlease provide a database name\n\r");
+                }
+
+                $db = new Database;
+                $query = "create database if not exists " . $param1;
+                $db->query($query);
+
+                die("\n\rDatabase created successfully\n\r");
+                break;
+
+                // Seed
+            case 'db:seed':
+                # code...
+                break;
+
+                // Table
+            case 'db:table':
+                // Check si param1 est vide
+                if (empty($param1)) {
+                    die("\n\rPlease provide a table name\n\r");
+                }
+
+                $db = new Database;
+                $query = "describe " . $param1;
+                $result = $db->query($query);
+
+                if ($result) {
+                    print_r($result);
+                } else {
+                    echo "\n\rCould not find data for table : $param1\n\r";
+                }
+
+                die();
+                break;
+
+                // Drop
+            case 'db:drop':
+                // Check si param1 est vide
+                if (empty($param1)) {
+                    die("\n\rPlease provide a database name\n\r");
+                }
+
+                $db = new Database;
+                $query = "drop database " . $param1;
+                $db->query($query);
+
+                die("\n\rDatabase deleted successfully\n\r");
+                break;
+
+                // Default
+            default:
+                die("\n\rUnknown command $argv[1]");
+                break;
+        }
     }
 
     public function make($argv)
@@ -85,7 +146,7 @@ class Thunder
 
                 // Default
             default:
-                die("\n\rUnknown 'make' command !\n\r");
+                die("\n\rUnknown command $argv[1]");
                 break;
         }
     }

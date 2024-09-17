@@ -17,7 +17,7 @@ defined('ROOTPATH') or exit('Access Denied');
  */
 trait Model
 {
-    use \Model\Database;
+    use Database;
 
     protected $limit = 10;
     protected $offset = 0;
