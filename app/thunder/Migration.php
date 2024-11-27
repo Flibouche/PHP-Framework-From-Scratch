@@ -1,6 +1,6 @@
 <?php
 
-namespace Migration;
+namespace Thunder;
 
 defined('CPATH') or exit('Access Denied');
 
