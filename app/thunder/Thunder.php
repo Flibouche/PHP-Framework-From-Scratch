@@ -125,7 +125,10 @@ class Thunder
 
                 $sample_file = file_get_contents('app' . DS . 'thunder' . DS . 'samples' . DS . 'model-sample.php');
                 $sample_file = preg_replace("/\{CLASSNAME\}/", ucfirst($classname), $sample_file);
-                $sample_file = preg_replace("/\{table\}/", strtolower($classname), $sample_file);
+                /** only add as 's' at the end of table name if it doesnt exist**/
+                if (!preg_match("/s$/", $classname)) {
+                    $sample_file = preg_replace("/\{table\}/", strtolower($classname) . 's', $sample_file);
+                }
 
                 if (file_put_contents($filename, $sample_file)) {
                     die("\n\rModel created successfully\n\r");
@@ -136,7 +139,26 @@ class Thunder
 
                 // Migration
             case 'make:migration':
-                # code...
+                $folder = 'app' . DS . 'migrations' . DS;
+
+                if (!file_exists($folder)) {
+                    mkdir($folder, 0777, true);
+                }
+
+                $filename = $folder . date("jS_M_Y_H_i_s_") . ucfirst($classname) . ".php";
+                if (file_exists($filename)) {
+                    die("\n\rThat migration file already exists\n\r");
+                }
+
+                $sample_file = file_get_contents('app' . DS . 'thunder' . DS . 'samples' . DS . 'migration-sample.php');
+                $sample_file = preg_replace("/\{CLASSNAME\}/", ucfirst($classname), $sample_file);
+                $sample_file = preg_replace("/\{classname\}/", strtolower($classname), $sample_file);
+
+                if (file_put_contents($filename, $sample_file)) {
+                    die("\n\rMigration file created: " . basename($filename) . " \n\r");
+                } else {
+                    die("\n\rFailed to create Migration file due to an error\n\r");
+                }
                 break;
 
                 // Seeder
