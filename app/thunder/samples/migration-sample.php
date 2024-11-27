@@ -1,33 +1,38 @@
 <?php
 
-namespace Migration;
+namespace Thunder;
 
-defined('ROOTPATH') or exit('Access Denied');
+defined('ROOTPATH') OR exit('Access Denied!');
 
 /**
  * {CLASSNAME} class
  */
-class {CLASSNAME}
+class {CLASSNAME} extends Migration
 {
-    use Migration;
+	
+	public function up()
+	{
 
-    public function up()
-    {
-        /** Méthodes autorisées **/
-        /*
-        $this->addColumn();
-        $this->addPrimaryKey();
-        $this->addUniqueKey();
+		/** create a table **/
+		$this->addColumn('id int(11) NOT NULL AUTO_INCREMENT');
+		$this->addColumn('date_created datetime NULL');
+		$this->addColumn('date_updated datetime NULL');
+		$this->addPrimaryKey('id');
+		/*
+		$this->addUniqueKey();
+		*/
+		$this->createTable('{classname}');
 
-        $this->addData();
-        $this->insertData();
+		/** insert data **/
+		$this->addData('date_created',date("Y-m-d H:i:s"));
+		$this->addData('date_updated',date("Y-m-d H:i:s"));
 
-        $this->createTable();
-        */
-    }
+		$this->insertData('{classname}');
+	} 
 
-    public function down()
-    {
-        $this->dropTable('{classname}');
-    }
+	public function down()
+	{
+		$this->dropTable('{classname}');
+	}
+
 }
